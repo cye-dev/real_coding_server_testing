@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@ActiveProfiles("dev")
+@ActiveProfiles("test")
 @SpringBootTest
 public class PostValidServiceTest {
 
@@ -20,7 +20,7 @@ public class PostValidServiceTest {
 
     @DisplayName("post 제목/본문에 비속어가 있나 테스트")
     @Test
-    void testValidPostIncludeSlang() {
+    void testValidPostTitleAndContentIncludeSlang() {
         // given 시나리오
         String testTitle = "비속어가 섞인 제목";
         String testContent = "비속어가 섞인 욕";
@@ -30,4 +30,30 @@ public class PostValidServiceTest {
         // then 검증
         assertThat(validPost).isEqualTo(true);
     }
+
+    @DisplayName("post 제목 비속어가 있나 테스트")
+    @Test
+    void testValidPostTitleIncludeSlang() {
+        // given 시나리오
+        String testTitle = "비속어가 섞인 제목";
+        List<String> slangList = List.of("비속어", "비속어2");
+
+        boolean validPost = postValidService.isSlangIncludeTitle(slangList, testTitle);
+        // then 검증
+        assertThat(validPost).isEqualTo(true);
+    }
+
+
+    @DisplayName("post 본문에 비속어가 있나 테스트")
+    @Test
+    void testValidPostContentIncludeSlang() {
+        // given 시나리오
+        String testContent = "비속어가 섞인 욕";
+        List<String> slangList = List.of("비속어", "비속어2");
+
+        boolean validPost = postValidService.isSlangIncludeContent(slangList, testContent);
+        // then 검증
+        assertThat(validPost).isEqualTo(true);
+    }
+
 }
